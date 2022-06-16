@@ -11,7 +11,9 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.jpa.api.dao.DaoRegistry;
 import ca.uhn.fhir.jpa.api.dao.IFhirResourceDao;
 import ca.uhn.fhir.jpa.api.model.DaoMethodOutcome;
+import ca.uhn.fhir.jpa.partition.SystemRequestDetails;
 import ca.uhn.fhir.jpa.searchparam.SearchParameterMap;
+import ca.uhn.fhir.rest.api.Constants;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
@@ -231,7 +233,17 @@ public interface DaoRegistryUser extends FhirContextUser {
 		checkNotNull(theResourceClass);
 		checkNotNull(theSearchMap);
 
+		RequestDetails newDeets = null;
+		if (theRequestDetails != null) {
+			SystemRequestDetails srd = new SystemRequestDetails();
+			srd.setTenantId(theRequestDetails.getTenantId());
+			srd.addHeader(Constants.HEADER_CACHE_CONTROL,
+					Constants.CACHE_CONTROL_NO_STORE + "," + Constants.CACHE_CONTROL_NO_CACHE);
+
+			newDeets = srd;
+		}
+
 		return TypedBundleProvider.fromBundleProvider(
-				getDaoRegistry().getResourceDao(theResourceClass).search(theSearchMap, theRequestDetails));
+				getDaoRegistry().getResourceDao(theResourceClass).search(theSearchMap, newDeets));
 	}
 }
