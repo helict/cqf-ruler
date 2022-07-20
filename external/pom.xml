@@ -56,6 +56,11 @@
 			<classifier>classes</classifier>
 		</dependency>
 
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
+		</dependency>
+
 		<!-- HAPI-FHIR uses Logback for logging support. The logback library is included automatically by Maven as a part of the hapi-fhir-base dependency, but you also need to include a logging library. Logback
             is used here, but log4j would also be fine. -->
 		<dependency>
@@ -73,12 +78,64 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- Needed for JEE/Servlet support -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-adapter-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-admin-client</artifactId>
+			<version>${keycloak.version}</version>
+			<!-- https://github.com/keycloak/keycloak/issues/9599 -->
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.resteasy</groupId>
+					<artifactId>resteasy-multipart-provider</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.resteasy</groupId>
+					<artifactId>resteasy-jackson2-provider</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.resteasy</groupId>
+					<artifactId>resteasy-jaxb-provider</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
@@ -101,6 +158,11 @@
 										<include name="**/*.*"/>
 									</fileset>
 								</copy>
+								<copy todir="${project.build.directory}/generated-sources/hapi-fhir-jpaserver-starter/java/org/opencds/cqf/ruler/external">
+									<fileset dir="${project.build.directory}/../hapi-fhir-jpaserver-starter/src/main/java/org/helict/fhir/jpa/starter">
+										<include name="**/*.*"/>
+									</fileset>
+								</copy>
 								<copy todir="${project.build.directory}/generated-sources/hapi-fhir-jpaserver-starter/resources">
 									<fileset dir="${project.build.directory}/../hapi-fhir-jpaserver-starter/src/main/resources">
 										<include name="**/*.*"/>
@@ -120,8 +182,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
-					<additionalparam>-Xdoclint:none</additionalparam>
-					<additionalOptions>-Xdoclint:none</additionalOptions>
+					<additionalOptions>
+						<additionalOption>-Xdoclint:none</additionalOption>
+					</additionalOptions>
 					<additionalJOption>-Xdoclint:none</additionalJOption>
 				</configuration>
 			</plugin>
@@ -181,7 +244,15 @@
 							<value>package org.opencds.cqf.ruler.external</value>
 						</replacement>
 						<replacement>
+							<token>^package org.helict.fhir.jpa.starter</token>
+							<value>package org.opencds.cqf.ruler.external</value>
+						</replacement>
+						<replacement>
 							<token>^import ca.uhn.fhir.jpa.starter.</token>
+							<value>import org.opencds.cqf.ruler.external.</value>
+						</replacement>
+						<replacement>
+							<token>^import org.helict.fhir.jpa.starter.</token>
 							<value>import org.opencds.cqf.ruler.external.</value>
 						</replacement>
 						<replacement>

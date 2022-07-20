@@ -74,6 +74,9 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring_boot_version>2.5.12</spring_boot_version>
 		<spring_version>5.3.18</spring_version>
+		<keycloak.version>17.0.1</keycloak.version>
+		<resteasy_version>4.7.5.Final</resteasy_version>
+		<testcontainers_version>1.16.0</testcontainers_version>
 	</properties>
 
 	<dependencyManagement>
@@ -82,6 +85,14 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-framework-bom</artifactId>
 				<version>${spring_version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.keycloak.bom</groupId>
+				<artifactId>keycloak-adapter-bom</artifactId>
+				<version>${keycloak.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -363,6 +374,12 @@
 
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-security</artifactId>
+				<version>${spring_boot_version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-devtools</artifactId>
 				<version>${spring_boot_version}</version>
 				<optional>true</optional>
@@ -403,6 +420,25 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-test</artifactId>
 				<version>${spring_boot_version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers</artifactId>
+				<version>${testcontainers_version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>elasticsearch</artifactId>
+				<version>${testcontainers_version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>junit-jupiter</artifactId>
+				<version>${testcontainers_version}</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
@@ -521,7 +557,7 @@
 					<configuration>
 						<source>8</source>
 						<failOnWarnings>true</failOnWarnings>
-						<failOnErrors>true</failOnErrors>
+						<failOnError>true</failOnError>
 						<!--TODO: Add missing Javadoc comments -->
 						<doclint>none</doclint>
 					</configuration>
