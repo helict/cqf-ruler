@@ -1,3 +1,10 @@
+# base spring boot server configuration
+server:
+#   forward-headers-strategy: NATIVE   # needed behind proxy
+#   servlet:
+#      context-path: /cqf-ruler  # define context path for app
+#   tomcat:
+#      redirect-context-root: false
 management:
    endpoints:
       web:
@@ -121,6 +128,8 @@ hapi:
             server_address: "http://localhost:8080/fhir"
             refuse_to_fetch_third_party_urls: false
             fhir_version: R4
+#            auth:
+#               type: FORWARD
          # global:
          #   name: Global Tester
          #   server_address: "http://hapi.fhir.org/baseR4"
@@ -224,6 +233,10 @@ hapi:
             searchStyle: GET
          prefetch:
             maxUriLength: 8000
+# Keycloak Configuration:
+# disable default Keycloak Adapter Config
+keycloak:
+   enabled: false
 #elasticsearch:
 #  debug:
 #    pretty_print_json_log: false
