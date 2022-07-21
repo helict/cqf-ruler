@@ -7,6 +7,7 @@ import org.opencds.cqf.ruler.external.annotations.OnEitherVersion;
 import org.opencds.cqf.ruler.external.cql.StarterCqlDstu3Config;
 import org.opencds.cqf.ruler.external.cql.StarterCqlR4Config;
 import org.opencds.cqf.ruler.external.mdm.MdmConfig;
+import org.opencds.cqf.ruler.external.security.SecurityAutoConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.SpringApplication;
@@ -38,7 +39,7 @@ import ca.uhn.fhir.jpa.subscription.submit.config.SubscriptionSubmitterConfig;
 				StarterCqlDstu3Config.class, CqlR4Config.class, CqlDstu3Config.class, BaseCqlConfig.class }))
 @SpringBootApplication(exclude = { ElasticsearchRestClientAutoConfiguration.class, QuartzAutoConfiguration.class })
 @Import({ SubscriptionSubmitterConfig.class, SubscriptionProcessorConfig.class, SubscriptionChannelConfig.class,
-		WebsocketDispatcherConfig.class, MdmConfig.class, TesterUIConfig.class, BeanFinderConfig.class })
+		WebsocketDispatcherConfig.class, MdmConfig.class, TesterUIConfig.class, BeanFinderConfig.class, SecurityAutoConfiguration.class })
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
