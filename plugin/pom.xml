@@ -20,6 +20,7 @@
 		<module>ra</module>
 		<module>sdc</module>
 		<module>security</module>
+		<module>workflow-instantiate</module>
 	</modules>
 	<dependencies>
 		<dependency>
